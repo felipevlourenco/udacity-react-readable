@@ -5,8 +5,9 @@ import { connect } from 'react-redux'
 import { addCategory } from './../store/actions/categories'
 import { addPost } from './../store/actions/posts'
 
-import uuid from 'uuid/v4'
+import Moment from 'react-moment'
 
+import AddPostModal from './AddPostModal'
 import { Button } from 'react-bootstrap'
 
 import MdComment from 'react-icons/lib/md/comment'
@@ -26,9 +27,9 @@ const mapDispatchToProps = dispatch => {
 
 class Root extends Component {
   state = {
-    // categories: [],
-    // posts: []
+    isModalOpen: false
   }
+
   componentDidMount() {
     readableAPI.getCategories().then(categories => {
       // this.setState({ categories: categories })
@@ -40,21 +41,12 @@ class Root extends Component {
     })
   }
 
-  addPost = () => {
-    const post = {
-      id: uuid(),
-      timestamp: Date.now(),
-      title: 'values.title',
-      body: 'values.body',
-      author: 'values.author',
-      category: 'react'
-    }
+  openModal = () => {
+    this.setState({ isModalOpen: true })
+  }
 
-    readableAPI.addPost(post).then(post => {
-      // dispatch({ type: ADD, post })
-      // toastr.success('Success', 'Post posted successfully.')
-      console.log(post)
-    })
+  closeModal = () => {
+    this.setState({ isModalOpen: false })
   }
 
   render() {
@@ -68,9 +60,10 @@ class Root extends Component {
         </div>
         <div className="posts">
           <h2>Posts</h2>
-          <div className="row">
-            {this.props.posts.posts.map(post => (
-              <div key={post.id} className="col-md-6">
+          {this.props.posts.posts.map(post => (
+            <div key={post.id} className="row">
+              <div className="col-md-3" />
+              <div className="col-md-6">
                 <div className="post">
                   <div className="post-header">
                     <div className="row">
@@ -85,30 +78,32 @@ class Root extends Component {
                   </div>
                   <div className="post-footer">
                     <div className="row">
-                      <div className="col-md-8">{post.category}</div>
-                      <div className="col-md-2">
-                        <MdComment />
-                        {post.commentCount}
+                      <div className="col-md-8">
+                        <Moment format="DD/MM/YYYY HH:mm">{post.timestamp}</Moment>
                       </div>
                       <div className="col-md-2">
-                        <MdCompareArrows />
-                        {post.voteScore}
+                        <MdComment /> {post.commentCount}
+                      </div>
+                      <div className="col-md-2">
+                        <MdCompareArrows /> {post.voteScore}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+              <div className="col-md-3" />
+            </div>
+          ))}
         </div>
 
         <div className="row">
           <div className="col-md-12">
-            <Button bsStyle="primary" onClick={this.addPost}>
+            <Button bsStyle="primary" onClick={this.openModal}>
               Add post
             </Button>
           </div>
         </div>
+        {this.state.isModalOpen && <AddPostModal closeModalAction={this.closeModal} />}
       </div>
     )
   }
