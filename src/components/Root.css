@@ -1,0 +1,20 @@
+.post {
+  background-color: #fff;
+  width: 500px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px #aaa;
+}
+.post-header {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.post-body {
+  padding: 10px 0;
+}
+
+.post-footer {
+  font-size: 16px;
+}

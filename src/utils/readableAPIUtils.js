@@ -1,6 +1,8 @@
 const api = 'http://localhost:3001'
 
+// Generate a unique token for storing your bookshelf data on the backend server.
 let token = localStorage.token
+
 if (!token)
   token = localStorage.token = Math.random()
     .toString(36)
@@ -8,12 +10,13 @@ if (!token)
 
 const headers = {
   Accept: 'application/json',
-  Authorization: token
+  Authorization: token,
+  'Content-Type': 'application/json'
 }
 
 export const getCategories = () => {
   return fetch(`${api}/categories/`, { headers })
-    .then(res => res.json())
+    .then(response => response.json())
     .then(data => data.categories)
 }
 
@@ -25,5 +28,10 @@ export const getPostsFromCategory = category => {
 
 export const getPosts = () => {
   return fetch(`${api}/posts`, { headers }).then(res => res.json())
-  // .then(data => data.posts)
+}
+
+export const addPost = post => {
+  const body = JSON.stringify(post)
+
+  return fetch(`${api}/posts/`, { method: 'POST', headers, body }).then(response => response.json())
 }

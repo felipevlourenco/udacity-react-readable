@@ -1,15 +1,10 @@
-// import { createStore } from 'redux'
-// import cartsReducer from './reducers/carts'
-
-// const store = createStore(cartsReducer)
-
-// export default store
-
 import { createStore, combineReducers } from 'redux'
 import categoriesReducer from './reducers/categories'
+import postsReducer from './reducers/posts'
 
 const rootReducer = combineReducers({
-  categories: categoriesReducer
+  categories: categoriesReducer,
+  posts: postsReducer
 })
 
 const configureStore = () => {

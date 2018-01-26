@@ -1,15 +1,15 @@
-import { ADD_CATEGORY } from './../actions/actionTypes'
+import { ADD_POST } from './../actions/actionTypes'
 
 const initialState = {
-  categories: []
+  posts: []
 }
 
-const categoriesReducer = (state = initialState, action) => {
+const postsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_CATEGORY:
+    case ADD_POST:
       return {
         ...state,
-        categories: state.categories.concat(action.payload)
+        posts: state.posts.concat(action.payload)
       }
     // case UPDATE_CART:
     //   const updatedCarts = state.carts.map(cart => {
@@ -24,4 +24,4 @@ const categoriesReducer = (state = initialState, action) => {
   }
 }
 
-export default categoriesReducer
+export default postsReducer
