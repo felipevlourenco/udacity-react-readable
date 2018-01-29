@@ -1,11 +1,17 @@
-import { ADD_POST, EDIT_POST } from './../actions/actionTypes'
+import { ADD_POST, EDIT_POST, SELECT_POST } from './../actions/actionTypes'
 
 const initialState = {
-  posts: []
+  posts: [],
+  selectedPost: {}
 }
 
 const postsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SELECT_POST:
+      return {
+        ...state,
+        selectedPost: action.payload
+      }
     case ADD_POST:
       return {
         ...state,

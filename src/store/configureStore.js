@@ -1,10 +1,12 @@
 import { createStore, combineReducers } from 'redux'
 import categoriesReducer from './reducers/categories'
 import postsReducer from './reducers/posts'
+import commentsReducer from './reducers/comments'
 
 const rootReducer = combineReducers({
   categories: categoriesReducer,
-  posts: postsReducer
+  posts: postsReducer,
+  comments: commentsReducer
 })
 
 const configureStore = () => {

@@ -4,10 +4,12 @@ import * as readableAPI from './../utils/readableAPIUtils'
 import { connect } from 'react-redux'
 import { addCategory } from './../store/actions/categories'
 import { addPost } from './../store/actions/posts'
+import { selectPost } from '../store/actions/posts'
 
 import Moment from 'react-moment'
 
-import AddPostModal from './AddPostModal'
+import PostModal from './PostModal'
+import CommentsModal from './CommentsModal'
 import { Button } from 'react-bootstrap'
 
 import MdComment from 'react-icons/lib/md/comment'
@@ -21,13 +23,15 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addCategory: category => dispatch(addCategory(category)),
-    addPost: post => dispatch(addPost(post))
+    addPost: post => dispatch(addPost(post)),
+    selectPost: post => dispatch(selectPost(post))
   }
 }
 
 class Root extends Component {
   state = {
-    isModalOpen: false,
+    isPostModalOpen: false,
+    isCommentModalOpen: false,
     postId: ''
   }
 
@@ -42,18 +46,29 @@ class Root extends Component {
     })
   }
 
-  openModal = id => {
+  openModal = (type, id) => {
     if (id) {
       this.setState({ postId: id })
     }
-    this.setState({ isModalOpen: true })
+
+    if (type === 'post') {
+      this.setState({ isPostModalOpen: true })
+    } else if (type === 'comment') {
+      this.setState({ isCommentModalOpen: true })
+    }
   }
 
   closeModal = () => {
     this.setState({
-      isModalOpen: false,
+      isPostModalOpen: false,
+      isCommentModalOpen: false,
       postId: ''
     })
+  }
+
+  selectPost = post => {
+    this.props.selectPost(post)
+    this.props.history.push('/posts')
   }
 
   render() {
@@ -71,11 +86,12 @@ class Root extends Component {
             <div key={post.id} className="row">
               <div className="col-md-3" />
               <div className="col-md-6">
-                <div className="post" onClick={() => this.openModal(post.id)}>
-                  <div className="post-header">
+                <div className="post">
+                  {/* <div className="post-header" onClick={() => this.openModal('post', post.id)}> */}
+                  <div className="post-header" onClick={() => this.selectPost(post)}>
                     <div className="row">
-                      <div className="col-md-9">{post.title}</div>
-                      <div className="col-md-3">{post.author}</div>
+                      <div className="col-md-9 post-header-title">{post.title}</div>
+                      <div className="col-md-3 post-header-title">{post.author}</div>
                     </div>
                   </div>
                   <div className="post-body">
@@ -88,7 +104,7 @@ class Root extends Component {
                       <div className="col-md-8">
                         <Moment format="DD/MM/YYYY HH:mm">{post.timestamp}</Moment>
                       </div>
-                      <div className="col-md-2">
+                      <div className="col-md-2" onClick={() => this.openModal('comment', post.id)}>
                         <MdComment /> {post.commentCount}
                       </div>
                       <div className="col-md-2">
@@ -105,13 +121,16 @@ class Root extends Component {
 
         <div className="row">
           <div className="col-md-12">
-            <Button bsStyle="primary" onClick={this.openModal}>
+            <Button bsStyle="primary" onClick={() => this.openModal('post')}>
               Add post
             </Button>
           </div>
         </div>
-        {this.state.isModalOpen && (
-          <AddPostModal closeModalAction={this.closeModal} postId={this.state.postId} />
+        {this.state.isPostModalOpen && (
+          <PostModal closeModalAction={this.closeModal} postId={this.state.postId} />
+        )}
+        {this.state.isCommentModalOpen && (
+          <CommentsModal closeModalAction={this.closeModal} postId={this.state.postId} />
         )}
       </div>
     )

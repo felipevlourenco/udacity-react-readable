@@ -94,7 +94,11 @@ class AddPostModal extends Component {
       <div className="static-modal">
         <Modal.Dialog style={{ backgroundColor: 'rgba(0, 0, 0, 0.32)' }}>
           <Modal.Header>
-            <Modal.Title>Add comment</Modal.Title>
+            {this.props.postId.length > 0 ? (
+              <Modal.Title>Edit Post</Modal.Title>
+            ) : (
+              <Modal.Title>Add Post</Modal.Title>
+            )}
           </Modal.Header>
 
           <Modal.Body>

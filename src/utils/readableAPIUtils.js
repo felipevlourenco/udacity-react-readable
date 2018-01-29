@@ -47,3 +47,7 @@ export const editPost = post => {
     response.json()
   )
 }
+
+export const getCommentsFromPost = postId => {
+  return fetch(`${api}/posts/${postId}/comments`, { headers }).then(res => res.json())
+}

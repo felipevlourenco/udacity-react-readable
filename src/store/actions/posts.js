@@ -1,4 +1,9 @@
-import { ADD_POST, EDIT_POST } from './actionTypes'
+import { ADD_POST, EDIT_POST, SELECT_POST } from './actionTypes'
+
+export const selectPost = post => ({
+  type: SELECT_POST,
+  payload: post
+})
 
 export const addPost = post => ({
   type: ADD_POST,
