@@ -1,4 +1,4 @@
-import { ADD_POST } from './../actions/actionTypes'
+import { ADD_POST, EDIT_POST } from './../actions/actionTypes'
 
 const initialState = {
   posts: []
@@ -11,14 +11,14 @@ const postsReducer = (state = initialState, action) => {
         ...state,
         posts: state.posts.concat(action.payload)
       }
-    // case UPDATE_CART:
-    //   const updatedCarts = state.carts.map(cart => {
-    //     return cart._id === action._id ? action.payload : cart
-    //   })
-    //   return {
-    //     ...state,
-    //     carts: updatedCarts
-    //   }
+    case EDIT_POST:
+      const updatedPost = state.posts.map(post => {
+        return post.id === action.id ? action.payload : post
+      })
+      return {
+        ...state,
+        posts: updatedPost
+      }
     default:
       return state
   }

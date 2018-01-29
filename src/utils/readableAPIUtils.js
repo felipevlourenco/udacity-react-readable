@@ -30,8 +30,20 @@ export const getPosts = () => {
   return fetch(`${api}/posts`, { headers }).then(res => res.json())
 }
 
+export const getPost = postId => {
+  return fetch(`${api}/posts/${postId}`, { headers }).then(res => res.json())
+}
+
 export const addPost = post => {
   const body = JSON.stringify(post)
 
   return fetch(`${api}/posts/`, { method: 'POST', headers, body }).then(response => response.json())
+}
+
+export const editPost = post => {
+  const body = JSON.stringify(post)
+
+  return fetch(`${api}/posts/${post.id}`, { method: 'PUT', headers, body }).then(response =>
+    response.json()
+  )
 }

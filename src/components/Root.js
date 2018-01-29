@@ -27,7 +27,8 @@ const mapDispatchToProps = dispatch => {
 
 class Root extends Component {
   state = {
-    isModalOpen: false
+    isModalOpen: false,
+    postId: ''
   }
 
   componentDidMount() {
@@ -41,12 +42,18 @@ class Root extends Component {
     })
   }
 
-  openModal = () => {
+  openModal = id => {
+    if (id) {
+      this.setState({ postId: id })
+    }
     this.setState({ isModalOpen: true })
   }
 
   closeModal = () => {
-    this.setState({ isModalOpen: false })
+    this.setState({
+      isModalOpen: false,
+      postId: ''
+    })
   }
 
   render() {
@@ -64,7 +71,7 @@ class Root extends Component {
             <div key={post.id} className="row">
               <div className="col-md-3" />
               <div className="col-md-6">
-                <div className="post">
+                <div className="post" onClick={() => this.openModal(post.id)}>
                   <div className="post-header">
                     <div className="row">
                       <div className="col-md-9">{post.title}</div>
@@ -103,7 +110,9 @@ class Root extends Component {
             </Button>
           </div>
         </div>
-        {this.state.isModalOpen && <AddPostModal closeModalAction={this.closeModal} />}
+        {this.state.isModalOpen && (
+          <AddPostModal closeModalAction={this.closeModal} postId={this.state.postId} />
+        )}
       </div>
     )
   }

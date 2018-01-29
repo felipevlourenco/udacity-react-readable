@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap'
 
 import { connect } from 'react-redux'
-import { addPost } from './../store/actions/posts'
+import { addPost, editPost } from './../store/actions/posts'
 import uuid from 'uuid/v4'
 
 const mapStateToProps = state => {
@@ -21,7 +21,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addPost: post => dispatch(addPost(post))
+    addPost: post => dispatch(addPost(post)),
+    editPost: post => dispatch(editPost(post))
   }
 }
 
@@ -57,6 +58,35 @@ class AddPostModal extends Component {
       this.props.addPost(post)
       this.handleCloseModal()
     })
+  }
+
+  editPost = () => {
+    const post = {
+      id: this.props.postId,
+      timestamp: Date.now(),
+      title: this.state.title,
+      body: this.state.body,
+      author: this.state.author,
+      category: this.state.category
+    }
+
+    readableAPI.editPost(post).then(post => {
+      this.props.editPost(post)
+      this.handleCloseModal()
+    })
+  }
+
+  componentDidMount() {
+    if (this.props.postId.length) {
+      readableAPI.getPost(this.props.postId).then(post => {
+        this.setState({
+          title: post.title,
+          body: post.body,
+          author: post.author,
+          category: post.category
+        })
+      })
+    }
   }
 
   render() {
@@ -107,8 +137,11 @@ class AddPostModal extends Component {
                     placeholder="Category"
                     name="category"
                     onChange={this.handleInput}
+                    defaultValue={this.state.category || ''}
                   >
-                    <option value="">Select cateogry</option>
+                    <option value="" disabled>
+                      Select cateogry
+                    </option>
                     {this.props.categories.categories.map(category => (
                       <option key={category.name} value={category.name}>
                         {category.name}
@@ -122,9 +155,15 @@ class AddPostModal extends Component {
 
           <Modal.Footer>
             <Button onClick={this.handleCloseModal}>Close</Button>
-            <Button bsStyle="primary" onClick={this.addPost}>
-              Add post
-            </Button>
+            {this.props.postId.length ? (
+              <Button bsStyle="primary" onClick={this.editPost}>
+                Edit post
+              </Button>
+            ) : (
+              <Button bsStyle="primary" onClick={this.addPost}>
+                Add post
+              </Button>
+            )}
           </Modal.Footer>
         </Modal.Dialog>
       </div>
