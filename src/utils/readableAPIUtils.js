@@ -14,6 +14,7 @@ const headers = {
   'Content-Type': 'application/json'
 }
 
+// Categories
 export const getCategories = () => {
   return fetch(`${api}/categories/`, { headers })
     .then(response => response.json())
@@ -26,6 +27,7 @@ export const getPostsFromCategory = category => {
     .then(data => data.posts)
 }
 
+// Posts
 export const getPosts = () => {
   return fetch(`${api}/posts`, { headers }).then(res => res.json())
 }
@@ -48,6 +50,15 @@ export const editPost = post => {
   )
 }
 
+// Comments
 export const getCommentsFromPost = postId => {
   return fetch(`${api}/posts/${postId}/comments`, { headers }).then(res => res.json())
+}
+
+export const addComment = comment => {
+  const body = JSON.stringify(comment)
+
+  return fetch(`${api}/comments/`, { method: 'POST', headers, body }).then(response =>
+    response.json()
+  )
 }

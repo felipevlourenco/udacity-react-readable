@@ -36,14 +36,16 @@ class Root extends Component {
   }
 
   componentDidMount() {
-    readableAPI.getCategories().then(categories => {
-      // this.setState({ categories: categories })
-      categories.forEach(category => this.props.addCategory(category))
-    })
-    readableAPI.getPosts().then(posts => {
-      // this.setState({ posts: posts })
-      posts.forEach(post => this.props.addPost(post))
-    })
+    if (!this.props.posts.posts.length) {
+      readableAPI.getCategories().then(categories => {
+        // this.setState({ categories: categories })
+        categories.forEach(category => this.props.addCategory(category))
+      })
+      readableAPI.getPosts().then(posts => {
+        // this.setState({ posts: posts })
+        posts.forEach(post => this.props.addPost(post))
+      })
+    }
   }
 
   openModal = (type, id) => {

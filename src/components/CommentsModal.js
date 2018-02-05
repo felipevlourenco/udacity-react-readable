@@ -26,7 +26,10 @@ const mapDispatchToProps = dispatch => {
 }
 
 class CommentsModal extends Component {
-  state = {}
+  state = {
+    body: '',
+    author: ''
+  }
 
   handleCloseModal = () => {
     this.props.closeModalAction()
@@ -35,6 +38,21 @@ class CommentsModal extends Component {
   handleInput = event => {
     this.setState({
       [event.target.name]: event.target.value
+    })
+  }
+
+  addComment = () => {
+    const comment = {
+      id: uuid(),
+      timestamp: Date.now(),
+      body: this.state.body,
+      author: this.state.author,
+      parentId: this.props.postId
+    }
+
+    readableAPI.addComment(comment).then(comment => {
+      this.props.addComment(comment)
+      this.handleCloseModal()
     })
   }
 
@@ -59,10 +77,22 @@ class CommentsModal extends Component {
               <Col md={12}>
                 <FieldGroup
                   type="text"
-                  label="Title"
-                  name="title"
-                  placeholder="Title"
-                  value={this.state.title}
+                  label="Body"
+                  name="body"
+                  placeholder="Body"
+                  value={this.state.body}
+                  onChange={this.handleInput}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col md={12}>
+                <FieldGroup
+                  type="text"
+                  label="Author"
+                  name="author"
+                  placeholder="Author"
+                  value={this.state.author}
                   onChange={this.handleInput}
                 />
               </Col>
@@ -71,7 +101,9 @@ class CommentsModal extends Component {
 
           <Modal.Footer>
             <Button onClick={this.handleCloseModal}>Close</Button>
-            <Button bsStyle="primary">Comment</Button>
+            <Button bsStyle="primary" onClick={this.addComment}>
+              Add Comment
+            </Button>
           </Modal.Footer>
         </Modal.Dialog>
       </div>
