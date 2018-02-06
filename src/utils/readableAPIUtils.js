@@ -62,3 +62,9 @@ export const addComment = comment => {
     response.json()
   )
 }
+
+export const deleteComment = id => {
+  return fetch(`${api}/comments/${id}`, { method: 'DELETE', headers }).then(response =>
+    response.json()
+  )
+}

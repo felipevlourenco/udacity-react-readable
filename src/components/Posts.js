@@ -3,7 +3,7 @@ import * as readableAPI from './../utils/readableAPIUtils'
 
 import { connect } from 'react-redux'
 import { editPost } from './../store/actions/posts'
-import { addComment } from '../store/actions/comments'
+import { addComment, cleanComments, deleteComment } from '../store/actions/comments'
 
 import Moment from 'react-moment'
 import MdCompareArrows from 'react-icons/lib/md/compare-arrows'
@@ -20,7 +20,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     editPost: post => dispatch(editPost(post)),
-    addComment: comment => dispatch(addComment(comment))
+    addComment: comment => dispatch(addComment(comment)),
+    cleanComments: () => dispatch(cleanComments()),
+    deleteComment: id => dispatch(deleteComment(id))
   }
 }
 
@@ -31,6 +33,12 @@ class Posts extends Component {
     body: '',
     author: '',
     category: ''
+  }
+
+  deleteComment = id => {
+    readableAPI.deleteComment(id).then(result => {
+      this.props.deleteComment(id)
+    })
   }
 
   openModal = () => {
@@ -44,16 +52,11 @@ class Posts extends Component {
   }
 
   componentDidMount() {
-    // this.setState({
-    //   title: this.props.posts.selectedPost.title,
-    //   body: this.props.posts.selectedPost.body,
-    //   author: this.props.posts.selectedPost.author,
-    //   category: this.props.posts.selectedPost.category
-    // })
-    console.log('====================================')
-    console.log(this.props.posts.selectedPost)
-    console.log('====================================')
+    // console.log('====================================')
+    // console.log(this.props.posts.selectedPost)
+    // console.log('====================================')
     readableAPI.getCommentsFromPost(this.props.posts.selectedPost.id).then(comments => {
+      this.props.cleanComments()
       comments.forEach(comment => this.props.addComment(comment))
     })
   }
@@ -91,10 +94,19 @@ class Posts extends Component {
           <h2>Comments:</h2>
         </div>
         {this.props.comments.comments.map(comment => (
-          <div className="post" key={comment.id}>
-            <div className="post-header">
-              <div className="post-header-title">{comment.body}</div>
-            </div>
+          <div key={comment.id}>
+            {!comment.deleted && (
+              <div className="post">
+                <div className="post-header">
+                  <div className="post-header-title">
+                    <div>{comment.body}</div>
+                    <div>
+                      <span onClick={() => this.deleteComment(comment.id)}>X</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ))}
         <Button bsStyle="primary" onClick={() => this.openModal()}>

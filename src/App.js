@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar inverse collapseOnSelect>
+        <Navbar inverse>
           <Navbar.Header>
             <Navbar.Brand>
               <a href="">Udacity - Readable</a>
