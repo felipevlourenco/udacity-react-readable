@@ -1,4 +1,4 @@
-import { ADD_POST, EDIT_POST, SELECT_POST } from './../actions/actionTypes'
+import { ADD_POST, EDIT_POST, SELECT_POST, DELETE_POST } from './../actions/actionTypes'
 
 const initialState = {
   posts: [],
@@ -24,6 +24,17 @@ const postsReducer = (state = initialState, action) => {
       return {
         ...state,
         posts: updatedPost
+      }
+    case DELETE_POST:
+      const newPosts = state.posts.map(post => {
+        if (post.id === action.payload) {
+          post.deleted = true
+        }
+        return post
+      })
+      return {
+        ...state,
+        posts: newPosts
       }
     default:
       return state

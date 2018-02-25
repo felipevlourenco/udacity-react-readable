@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { addCategory } from './../store/actions/categories'
 import { addPost } from './../store/actions/posts'
 import { selectPost } from '../store/actions/posts'
+import { deletePost } from '../store/actions/posts'
 
 import Moment from 'react-moment'
 
@@ -24,7 +25,8 @@ const mapDispatchToProps = dispatch => {
   return {
     addCategory: category => dispatch(addCategory(category)),
     addPost: post => dispatch(addPost(post)),
-    selectPost: post => dispatch(selectPost(post))
+    selectPost: post => dispatch(selectPost(post)),
+    deletePost: id => dispatch(deletePost(id))
   }
 }
 
@@ -73,6 +75,13 @@ class Root extends Component {
     this.props.history.push('/posts')
   }
 
+  deletePost = id => {
+    readableAPI.deletePost(id).then(post => {
+      this.props.deletePost(id)
+      window.location.href = '/'
+    })
+  }
+
   render() {
     return (
       <div className="root">
@@ -87,35 +96,45 @@ class Root extends Component {
           {this.props.posts.posts.map(post => (
             <div key={post.id} className="row">
               <div className="col-md-3" />
-              <div className="col-md-6">
-                <div className="post">
-                  {/* <div className="post-header" onClick={() => this.openModal('post', post.id)}> */}
-                  <div className="post-header" onClick={() => this.selectPost(post)}>
-                    <div className="row">
-                      <div className="col-md-9 post-header-title">{post.title}</div>
-                      <div className="col-md-3 post-header-title">{post.author}</div>
-                    </div>
-                  </div>
-                  <div className="post-body">
-                    <div className="row">
-                      <div className="col-md-12">{post.body}</div>
-                    </div>
-                  </div>
-                  <div className="post-footer">
-                    <div className="row">
-                      <div className="col-md-8">
-                        <Moment format="DD/MM/YYYY HH:mm">{post.timestamp}</Moment>
+              {!post.delete && (
+                <div className="col-md-6">
+                  <div className="post">
+                    {/* <div className="post-header" onClick={() => this.openModal('post', post.id)}> */}
+                    <div className="post-header" onClick={() => this.selectPost(post)}>
+                      <div className="row">
+                        <div className="col-md-9 post-header-title">{post.title}</div>
+                        <div className="col-md-3 post-header-title">{post.author}</div>
                       </div>
-                      <div className="col-md-2" onClick={() => this.openModal('comment', post.id)}>
-                        <MdComment /> {post.commentCount}
+                    </div>
+                    <div className="post-body">
+                      <div className="row">
+                        <div className="col-md-12">{post.body}</div>
                       </div>
-                      <div className="col-md-2">
-                        <MdCompareArrows /> {post.voteScore}
+                    </div>
+                    <div className="post-footer">
+                      <div className="row">
+                        <div className="col-md-8">
+                          <Moment format="DD/MM/YYYY HH:mm">{post.timestamp}</Moment>
+                        </div>
+                        <div
+                          className="col-md-2"
+                          onClick={() => this.openModal('comment', post.id)}
+                        >
+                          <MdComment /> {post.commentCount}
+                        </div>
+                        <div className="col-md-2">
+                          <MdCompareArrows /> {post.voteScore}
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <button onClick={() => this.deletePost(post.id)}>Delete post</button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
               <div className="col-md-3" />
             </div>
           ))}

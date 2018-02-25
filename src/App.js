@@ -14,7 +14,7 @@ class App extends Component {
         <Navbar inverse>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="">Udacity - Readable</a>
+              <a href="/">Udacity - Readable</a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>

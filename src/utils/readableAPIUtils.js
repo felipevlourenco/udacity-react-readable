@@ -50,6 +50,12 @@ export const editPost = post => {
   )
 }
 
+export const deletePost = id => {
+  return fetch(`${api}/posts/${id}`, { method: 'DELETE', headers }).then(response =>
+    response.json()
+  )
+}
+
 // Comments
 export const getCommentsFromPost = postId => {
   return fetch(`${api}/posts/${postId}/comments`, { headers }).then(res => res.json())

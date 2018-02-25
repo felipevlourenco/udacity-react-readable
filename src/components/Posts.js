@@ -9,6 +9,7 @@ import Moment from 'react-moment'
 import MdCompareArrows from 'react-icons/lib/md/compare-arrows'
 import { Button } from 'react-bootstrap'
 
+import PostModal from './PostModal'
 import CommentsModal from './CommentsModal'
 
 import './Root.css'
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch => {
 
 class Posts extends Component {
   state = {
+    isPostModalOpen: false,
     isCommentModalOpen: false,
     title: '',
     body: '',
@@ -41,12 +43,17 @@ class Posts extends Component {
     })
   }
 
-  openModal = () => {
-    this.setState({ isCommentModalOpen: true })
+  openModal = type => {
+    if (type === 'edit') {
+      this.setState({ isPostModalOpen: true })
+    } else {
+      this.setState({ isCommentModalOpen: true })
+    }
   }
 
   closeModal = () => {
     this.setState({
+      isPostModalOpen: false,
       isCommentModalOpen: false
     })
   }
@@ -109,9 +116,15 @@ class Posts extends Component {
             )}
           </div>
         ))}
+        <Button bsStyle="primary" onClick={() => this.openModal('edit')}>
+          Edit post
+        </Button>
         <Button bsStyle="primary" onClick={() => this.openModal()}>
           Add comment
         </Button>
+        {this.state.isPostModalOpen && (
+          <PostModal closeModalAction={this.closeModal} postId={selectedPost.id} />
+        )}
         {this.state.isCommentModalOpen && (
           <CommentsModal closeModalAction={this.closeModal} postId={selectedPost.id} />
         )}
