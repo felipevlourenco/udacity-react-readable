@@ -3,6 +3,7 @@ import {
   EDIT_POST,
   SELECT_POST,
   DELETE_POST,
+  CLEAN_POSTS,
   VOTE_POST,
   ORDER_VOTE_POST
 } from './actionTypes'
@@ -26,6 +27,10 @@ export const editPost = post => ({
 export const deletePost = id => ({
   type: DELETE_POST,
   payload: id
+})
+
+export const clearPosts = () => ({
+  type: CLEAN_POSTS
 })
 
 export const votePost = (id, vote) => ({

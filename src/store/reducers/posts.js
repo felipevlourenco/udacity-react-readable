@@ -3,6 +3,7 @@ import {
   EDIT_POST,
   SELECT_POST,
   DELETE_POST,
+  CLEAN_POSTS,
   VOTE_POST,
   ORDER_VOTE_POST
 } from './../actions/actionTypes'
@@ -42,6 +43,11 @@ const postsReducer = (state = initialState, action) => {
       return {
         ...state,
         posts: newPosts
+      }
+    case CLEAN_POSTS:
+      return {
+        ...state,
+        posts: []
       }
     case VOTE_POST:
       const votedPosts = state.posts.map(post => {

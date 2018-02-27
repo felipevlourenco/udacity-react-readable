@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import * as readableAPI from './../utils/readableAPIUtils'
+import { Link } from 'react-router-dom'
 
 import { connect } from 'react-redux'
-import { addCategory } from './../store/actions/categories'
+import { addCategory, selectCategory } from './../store/actions/categories'
 import { addPost } from './../store/actions/posts'
 import { selectPost } from '../store/actions/posts'
 import { deletePost } from '../store/actions/posts'
@@ -26,6 +27,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addCategory: category => dispatch(addCategory(category)),
+    selectCategory: category => dispatch(selectCategory(category)),
     addPost: post => dispatch(addPost(post)),
     selectPost: post => dispatch(selectPost(post)),
     deletePost: id => dispatch(deletePost(id)),
@@ -52,6 +54,10 @@ class Root extends Component {
         posts.forEach(post => this.props.addPost(post))
       })
     }
+  }
+
+  selectCategory = category => {
+    this.props.selectCategory(category)
   }
 
   openModal = (type, id) => {
@@ -102,7 +108,9 @@ class Root extends Component {
         <div className="categories">
           <h2>Categories</h2>
           {this.props.categories.categories.map(category => (
-            <div key={category.name}>{category.name}</div>
+            <div key={category.name} onClick={() => this.selectCategory(category.name)}>
+              <Link to="/categories">{category.name}</Link>
+            </div>
           ))}
         </div>
         <div className="posts">

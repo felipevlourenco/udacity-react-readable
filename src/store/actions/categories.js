@@ -1,12 +1,11 @@
-import { ADD_CATEGORY } from './actionTypes'
+import { ADD_CATEGORY, SELECT_CATEGORY } from './actionTypes'
 
 export const addCategory = category => ({
   type: ADD_CATEGORY,
   payload: category
 })
 
-// export const updateCart = cart => ({
-//   type: UPDATE_CART,
-//   _id: cart._id,
-//   payload: cart
-// })
+export const selectCategory = category => ({
+  type: SELECT_CATEGORY,
+  payload: category
+})
