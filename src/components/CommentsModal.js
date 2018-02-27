@@ -13,7 +13,7 @@ import {
 
 import { connect } from 'react-redux'
 import uuid from 'uuid/v4'
-import { addComment } from '../store/actions/comments'
+import { addComment, editComment } from '../store/actions/comments'
 
 const mapStateToProps = state => {
   return { comments: state.comments }
@@ -21,7 +21,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addComment: comment => dispatch(addComment(comment))
+    addComment: comment => dispatch(addComment(comment)),
+    editComment: comment => dispatch(editComment(comment))
   }
 }
 
@@ -56,12 +57,30 @@ class CommentsModal extends Component {
     })
   }
 
-  componentDidMount() {
-    readableAPI.getCommentsFromPost(this.props.postId).then(comments => {
-      console.log('====================================')
-      console.log(comments)
-      console.log('====================================')
+  editComment = () => {
+    const comment = {
+      id: this.props.comments.selectedComment.id,
+      timestamp: Date.now(),
+      body: this.state.body,
+      author: this.state.author,
+      parentId: this.props.postId
+    }
+
+    readableAPI.editComment(comment).then(comment => {
+      this.props.editComment(comment)
+      this.handleCloseModal()
     })
+  }
+
+  componentDidMount() {
+    if (this.props.comments.selectedComment.id !== undefined) {
+      this.setState({
+        body: this.props.comments.selectedComment.body,
+        author: this.props.comments.selectedComment.author
+      })
+    } else {
+      console.log('add')
+    }
   }
 
   render() {
@@ -101,9 +120,15 @@ class CommentsModal extends Component {
 
           <Modal.Footer>
             <Button onClick={this.handleCloseModal}>Close</Button>
-            <Button bsStyle="primary" onClick={this.addComment}>
-              Add Comment
-            </Button>
+            {this.props.comments.selectedComment.id !== undefined ? (
+              <Button bsStyle="primary" onClick={this.editComment}>
+                Edit Comment
+              </Button>
+            ) : (
+              <Button bsStyle="primary" onClick={this.addComment}>
+                Add Comment
+              </Button>
+            )}
           </Modal.Footer>
         </Modal.Dialog>
       </div>

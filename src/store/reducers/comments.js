@@ -1,7 +1,14 @@
-import { ADD_COMMENT, CLEAN_COMMENTS, DELETE_COMMENT } from './../actions/actionTypes'
+import {
+  ADD_COMMENT,
+  EDIT_COMMENT,
+  CLEAN_COMMENTS,
+  DELETE_COMMENT,
+  SELECT_COMMENT
+} from './../actions/actionTypes'
 
 const initialState = {
-  comments: []
+  comments: [],
+  selectedComment: {}
 }
 
 const commentsReducer = (state = initialState, action) => {
@@ -10,6 +17,14 @@ const commentsReducer = (state = initialState, action) => {
       return {
         ...state,
         comments: state.comments.concat(action.payload)
+      }
+    case EDIT_COMMENT:
+      const editedComments = state.comments.map(comment => {
+        return comment.id === action.id ? action.payload : comment
+      })
+      return {
+        ...state,
+        comments: editedComments
       }
     case CLEAN_COMMENTS:
       return {
@@ -26,6 +41,11 @@ const commentsReducer = (state = initialState, action) => {
       return {
         ...state,
         comments: updatedComments
+      }
+    case SELECT_COMMENT:
+      return {
+        ...state,
+        selectedComment: action.payload
       }
     default:
       return state

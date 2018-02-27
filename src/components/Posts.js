@@ -3,7 +3,7 @@ import * as readableAPI from './../utils/readableAPIUtils'
 
 import { connect } from 'react-redux'
 import { editPost } from './../store/actions/posts'
-import { addComment, cleanComments, deleteComment } from '../store/actions/comments'
+import { addComment, cleanComments, deleteComment, selectComment } from '../store/actions/comments'
 
 import Moment from 'react-moment'
 import MdCompareArrows from 'react-icons/lib/md/compare-arrows'
@@ -23,7 +23,8 @@ const mapDispatchToProps = dispatch => {
     editPost: post => dispatch(editPost(post)),
     addComment: comment => dispatch(addComment(comment)),
     cleanComments: () => dispatch(cleanComments()),
-    deleteComment: id => dispatch(deleteComment(id))
+    deleteComment: id => dispatch(deleteComment(id)),
+    selectComment: id => dispatch(selectComment(id))
   }
 }
 
@@ -43,10 +44,14 @@ class Posts extends Component {
     })
   }
 
-  openModal = type => {
+  openModal = (type, comment) => {
     if (type === 'edit') {
       this.setState({ isPostModalOpen: true })
+    } else if (type === 'edit_comment') {
+      this.props.selectComment(comment)
+      this.setState({ isCommentModalOpen: true })
     } else {
+      this.props.selectComment({})
       this.setState({ isCommentModalOpen: true })
     }
   }
@@ -108,7 +113,20 @@ class Posts extends Component {
                   <div className="post-header-title">
                     <div>{comment.body}</div>
                     <div>
-                      <span onClick={() => this.deleteComment(comment.id)}>X</span>
+                      <Button
+                        bsStyle="primary"
+                        className="paddinBtn"
+                        onClick={() => this.deleteComment(comment.id)}
+                      >
+                        Delete Comment
+                      </Button>
+                      <Button
+                        bsStyle="primary"
+                        className="paddinBtn"
+                        onClick={() => this.openModal('edit_comment', comment)}
+                      >
+                        Edit comment
+                      </Button>
                     </div>
                   </div>
                 </div>
