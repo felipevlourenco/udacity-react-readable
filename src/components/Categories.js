@@ -62,12 +62,6 @@ class Categories extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('====================================')
-    console.log(nextProps)
-    console.log('====================================')
-  }
-
   selectCategory = category => {
     this.props.selectCategory(category)
   }
@@ -150,72 +144,73 @@ class Categories extends Component {
           {this.props.posts.posts.map(post => (
             <div key={post.id} className="row">
               <div className="col-md-3" />
-              {!post.delete && (
-                <div className="col-md-6">
-                  <div className="post">
-                    {/* <div className="post-header" onClick={() => this.openModal('post', post.id)}> */}
-                    <div className="post-header" onClick={() => this.selectPost(post)}>
-                      <div className="row">
-                        <div className="col-md-9 post-header-title">{post.title}</div>
-                        <div className="col-md-3 post-header-title">{post.author}</div>
-                      </div>
-                    </div>
-                    <div className="post-body">
-                      <div className="row">
-                        <div className="col-md-12">{post.body}</div>
-                      </div>
-                    </div>
-                    <div className="post-footer">
-                      <div className="row">
-                        <div className="col-md-8">
-                          <Moment format="DD/MM/YYYY HH:mm">{post.timestamp}</Moment>
-                        </div>
-                        <div
-                          className="col-md-2"
-                          onClick={() => this.openModal('comment', post.id)}
-                        >
-                          <MdComment /> {post.commentCount}
-                        </div>
-                        <div className="col-md-2">
-                          <MdCompareArrows /> {post.voteScore}
+              {!post.delete &&
+                post.category === this.props.categories.selectedCategory && (
+                  <div className="col-md-6">
+                    <div className="post">
+                      {/* <div className="post-header" onClick={() => this.openModal('post', post.id)}> */}
+                      <div className="post-header" onClick={() => this.selectPost(post)}>
+                        <div className="row">
+                          <div className="col-md-9 post-header-title">{post.title}</div>
+                          <div className="col-md-3 post-header-title">{post.author}</div>
                         </div>
                       </div>
-                      <div className="row">
-                        <div className="col-md-12">
-                          <Button
-                            bsStyle="primary"
-                            className="paddinBtn"
-                            onClick={() => this.openModal('post', post.id)}
+                      <div className="post-body">
+                        <div className="row">
+                          <div className="col-md-12">{post.body}</div>
+                        </div>
+                      </div>
+                      <div className="post-footer">
+                        <div className="row">
+                          <div className="col-md-8">
+                            <Moment format="DD/MM/YYYY HH:mm">{post.timestamp}</Moment>
+                          </div>
+                          <div
+                            className="col-md-2"
+                            onClick={() => this.openModal('comment', post.id)}
                           >
-                            Edit post
-                          </Button>
-                          <Button
-                            bsStyle="primary"
-                            className="paddinBtn"
-                            onClick={() => this.deletePost(post.id)}
-                          >
-                            Delete post
-                          </Button>
-                          <Button
-                            bsStyle="primary"
-                            className="paddinBtn"
-                            onClick={() => this.votePost(post.id, 'upVote')}
-                          >
-                            Vote +
-                          </Button>
-                          <Button
-                            bsStyle="primary"
-                            className="paddinBtn"
-                            onClick={() => this.votePost(post.id, 'downVote')}
-                          >
-                            Vote -
-                          </Button>
+                            <MdComment /> {post.commentCount}
+                          </div>
+                          <div className="col-md-2">
+                            <MdCompareArrows /> {post.voteScore}
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-12">
+                            <Button
+                              bsStyle="primary"
+                              className="paddinBtn"
+                              onClick={() => this.openModal('post', post.id)}
+                            >
+                              Edit post
+                            </Button>
+                            <Button
+                              bsStyle="primary"
+                              className="paddinBtn"
+                              onClick={() => this.deletePost(post.id)}
+                            >
+                              Delete post
+                            </Button>
+                            <Button
+                              bsStyle="primary"
+                              className="paddinBtn"
+                              onClick={() => this.votePost(post.id, 'upVote')}
+                            >
+                              Vote +
+                            </Button>
+                            <Button
+                              bsStyle="primary"
+                              className="paddinBtn"
+                              onClick={() => this.votePost(post.id, 'downVote')}
+                            >
+                              Vote -
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
               <div className="col-md-3" />
             </div>
           ))}
