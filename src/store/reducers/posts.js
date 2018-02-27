@@ -1,4 +1,4 @@
-import { ADD_POST, EDIT_POST, SELECT_POST, DELETE_POST } from './../actions/actionTypes'
+import { ADD_POST, EDIT_POST, SELECT_POST, DELETE_POST, VOTE_POST } from './../actions/actionTypes'
 
 const initialState = {
   posts: [],
@@ -35,6 +35,21 @@ const postsReducer = (state = initialState, action) => {
       return {
         ...state,
         posts: newPosts
+      }
+    case VOTE_POST:
+      const votedPosts = state.posts.map(post => {
+        if (post.id === action.id) {
+          if (action.payload === 'upVote') {
+            post.voteScore++
+          } else if (action.payload === 'downVote') {
+            post.voteScore--
+          }
+        }
+        return post
+      })
+      return {
+        ...state,
+        posts: votedPosts
       }
     default:
       return state

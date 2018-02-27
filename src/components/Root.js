@@ -6,6 +6,7 @@ import { addCategory } from './../store/actions/categories'
 import { addPost } from './../store/actions/posts'
 import { selectPost } from '../store/actions/posts'
 import { deletePost } from '../store/actions/posts'
+import { votePost } from '../store/actions/posts'
 
 import Moment from 'react-moment'
 
@@ -26,7 +27,8 @@ const mapDispatchToProps = dispatch => {
     addCategory: category => dispatch(addCategory(category)),
     addPost: post => dispatch(addPost(post)),
     selectPost: post => dispatch(selectPost(post)),
-    deletePost: id => dispatch(deletePost(id))
+    deletePost: id => dispatch(deletePost(id)),
+    votePost: (id, vote) => dispatch(votePost(id, vote))
   }
 }
 
@@ -82,6 +84,12 @@ class Root extends Component {
     })
   }
 
+  votePost = (id, vote) => {
+    readableAPI.votePost(id, vote).then(post => {
+      this.props.votePost(id, vote)
+    })
+  }
+
   render() {
     return (
       <div className="root">
@@ -128,7 +136,24 @@ class Root extends Component {
                       </div>
                       <div className="row">
                         <div className="col-md-12">
-                          <button onClick={() => this.deletePost(post.id)}>Delete post</button>
+                          <Button bsStyle="primary" onClick={() => this.openModal('post', post.id)}>
+                            Edit post
+                          </Button>
+                          <Button bsStyle="primary" onClick={() => this.deletePost(post.id)}>
+                            Delete post
+                          </Button>
+                          <Button
+                            bsStyle="primary"
+                            onClick={() => this.votePost(post.id, 'upVote')}
+                          >
+                            +
+                          </Button>
+                          <Button
+                            bsStyle="primary"
+                            onClick={() => this.votePost(post.id, 'downVote')}
+                          >
+                            -
+                          </Button>
                         </div>
                       </div>
                     </div>
