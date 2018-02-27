@@ -116,10 +116,17 @@ class Posts extends Component {
             )}
           </div>
         ))}
-        <Button bsStyle="primary" onClick={() => this.openModal('edit')}>
+        <Button
+          bsStyle="primary"
+          className="paddinBtn"
+          onClick={() => (window.location.href = '/')}
+        >
+          Back
+        </Button>
+        <Button bsStyle="primary" className="paddinBtn" onClick={() => this.openModal('edit')}>
           Edit post
         </Button>
-        <Button bsStyle="primary" onClick={() => this.openModal()}>
+        <Button bsStyle="primary" className="paddinBtn" onClick={() => this.openModal()}>
           Add comment
         </Button>
         {this.state.isPostModalOpen && (

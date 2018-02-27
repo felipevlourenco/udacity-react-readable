@@ -1,4 +1,11 @@
-import { ADD_POST, EDIT_POST, SELECT_POST, DELETE_POST, VOTE_POST } from './actionTypes'
+import {
+  ADD_POST,
+  EDIT_POST,
+  SELECT_POST,
+  DELETE_POST,
+  VOTE_POST,
+  ORDER_VOTE_POST
+} from './actionTypes'
 
 export const selectPost = post => ({
   type: SELECT_POST,
@@ -25,4 +32,9 @@ export const votePost = (id, vote) => ({
   type: VOTE_POST,
   id: id,
   payload: vote
+})
+
+export const orderVotePost = type => ({
+  type: ORDER_VOTE_POST,
+  payload: type
 })

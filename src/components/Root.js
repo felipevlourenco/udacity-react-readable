@@ -7,6 +7,7 @@ import { addPost } from './../store/actions/posts'
 import { selectPost } from '../store/actions/posts'
 import { deletePost } from '../store/actions/posts'
 import { votePost } from '../store/actions/posts'
+import { orderVotePost } from '../store/actions/posts'
 
 import Moment from 'react-moment'
 
@@ -28,7 +29,8 @@ const mapDispatchToProps = dispatch => {
     addPost: post => dispatch(addPost(post)),
     selectPost: post => dispatch(selectPost(post)),
     deletePost: id => dispatch(deletePost(id)),
-    votePost: (id, vote) => dispatch(votePost(id, vote))
+    votePost: (id, vote) => dispatch(votePost(id, vote)),
+    orderVotePost: type => dispatch(orderVotePost(type))
   }
 }
 
@@ -90,6 +92,10 @@ class Root extends Component {
     })
   }
 
+  orderList = type => {
+    this.props.orderVotePost(type)
+  }
+
   render() {
     return (
       <div className="root">
@@ -101,6 +107,26 @@ class Root extends Component {
         </div>
         <div className="posts">
           <h2>Posts</h2>
+          <Button
+            bsStyle="primary"
+            className="paddinBtn"
+            onClick={() => this.orderList('downVote')}
+          >
+            Order by Down Vote
+          </Button>
+          <Button bsStyle="primary" className="paddinBtn" onClick={() => this.orderList('upVote')}>
+            Order by Up Vote
+          </Button>
+          <Button
+            bsStyle="primary"
+            className="paddinBtn"
+            onClick={() => this.orderList('downTime')}
+          >
+            Order by Down Time
+          </Button>
+          <Button bsStyle="primary" className="paddinBtn" onClick={() => this.orderList('upTime')}>
+            Order by Up Time
+          </Button>
           {this.props.posts.posts.map(post => (
             <div key={post.id} className="row">
               <div className="col-md-3" />
@@ -136,23 +162,33 @@ class Root extends Component {
                       </div>
                       <div className="row">
                         <div className="col-md-12">
-                          <Button bsStyle="primary" onClick={() => this.openModal('post', post.id)}>
+                          <Button
+                            bsStyle="primary"
+                            className="paddinBtn"
+                            onClick={() => this.openModal('post', post.id)}
+                          >
                             Edit post
                           </Button>
-                          <Button bsStyle="primary" onClick={() => this.deletePost(post.id)}>
+                          <Button
+                            bsStyle="primary"
+                            className="paddinBtn"
+                            onClick={() => this.deletePost(post.id)}
+                          >
                             Delete post
                           </Button>
                           <Button
                             bsStyle="primary"
+                            className="paddinBtn"
                             onClick={() => this.votePost(post.id, 'upVote')}
                           >
-                            +
+                            Vote +
                           </Button>
                           <Button
                             bsStyle="primary"
+                            className="paddinBtn"
                             onClick={() => this.votePost(post.id, 'downVote')}
                           >
-                            -
+                            Vote -
                           </Button>
                         </div>
                       </div>

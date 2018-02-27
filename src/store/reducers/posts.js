@@ -1,4 +1,11 @@
-import { ADD_POST, EDIT_POST, SELECT_POST, DELETE_POST, VOTE_POST } from './../actions/actionTypes'
+import {
+  ADD_POST,
+  EDIT_POST,
+  SELECT_POST,
+  DELETE_POST,
+  VOTE_POST,
+  ORDER_VOTE_POST
+} from './../actions/actionTypes'
 
 const initialState = {
   posts: [],
@@ -50,6 +57,37 @@ const postsReducer = (state = initialState, action) => {
       return {
         ...state,
         posts: votedPosts
+      }
+    case ORDER_VOTE_POST:
+      let copy = null
+      if (action.payload === 'downVote') {
+        copy = state.posts.sort((a, b) => {
+          if (a.voteScore < b.voteScore) return -1
+          if (a.voteScore > b.voteScore) return 1
+          return 0
+        })
+      } else if (action.payload === 'upVote') {
+        copy = state.posts.sort((a, b) => {
+          if (a.voteScore > b.voteScore) return -1
+          if (a.voteScore < b.voteScore) return 1
+          return 0
+        })
+      } else if (action.payload === 'downTime') {
+        copy = state.posts.sort((a, b) => {
+          if (a.timestamp < b.timestamp) return -1
+          if (a.timestamp > b.timestamp) return 1
+          return 0
+        })
+      } else if (action.payload === 'upTime') {
+        copy = state.posts.sort((a, b) => {
+          if (a.timestamp > b.timestamp) return -1
+          if (a.timestamp < b.timestamp) return 1
+          return 0
+        })
+      }
+      return {
+        ...state,
+        posts: copy
       }
     default:
       return state
