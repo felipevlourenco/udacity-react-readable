@@ -46,20 +46,22 @@ class Categories extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.posts.posts.length) {
-      readableAPI.getCategories().then(categories => {
-        // this.setState({ categories: categories })
-        categories.forEach(category => this.props.addCategory(category))
+    // if (!this.props.posts.posts.length) {
+    //   readableAPI.getCategories().then(categories => {
+    //     // this.setState({ categories: categories })
+    //     categories.forEach(category => this.props.addCategory(category))
+    //   })
+    readableAPI.getPosts().then(posts => {
+      // this.setState({ posts: posts })
+      this.props.clearPosts()
+      posts.forEach(post => {
+        if (post.category === this.props.category) {
+          this.props.addPost(post)
+        }
       })
-      readableAPI.getPosts().then(posts => {
-        // this.setState({ posts: posts })
-        posts.forEach(post => {
-          if (post.category === this.props.categories.selectedCategory) {
-            this.props.addPost(post)
-          }
-        })
-      })
-    }
+    })
+    // }
+    console.log(this.props.category)
   }
 
   selectCategory = category => {
@@ -111,14 +113,14 @@ class Categories extends Component {
   render() {
     return (
       <div className="categories">
-        <div className="categories">
+        {/* <div className="categories">
           <h2>Categories</h2>
           {this.props.categories.categories.map(category => (
             <div key={category.name} onClick={() => this.selectCategory(category.name)}>
               <Link to="/categories">{category.name}</Link>
             </div>
           ))}
-        </div>
+        </div> */}
         <div className="posts">
           <h2>Posts</h2>
           <Button
@@ -144,73 +146,77 @@ class Categories extends Component {
           {this.props.posts.posts.map(post => (
             <div key={post.id} className="row">
               <div className="col-md-3" />
-              {!post.delete &&
-                post.category === this.props.categories.selectedCategory && (
-                  <div className="col-md-6">
-                    <div className="post">
-                      {/* <div className="post-header" onClick={() => this.openModal('post', post.id)}> */}
-                      <div className="post-header" onClick={() => this.selectPost(post)}>
+              {!post.delete && (
+                <div className="col-md-6">
+                  <div className="post">
+                    {/* <div className="post-header" onClick={() => this.selectPost(post)}> */}
+                    <div className="post-header">
+                      <Link
+                        to={`/${this.props.category}/${post.id}`}
+                        onClick={() => this.selectPost(post)}
+                      >
                         <div className="row">
                           <div className="col-md-9 post-header-title">{post.title}</div>
                           <div className="col-md-3 post-header-title">{post.author}</div>
                         </div>
+                      </Link>
+                    </div>
+                    <div className="post-body">
+                      <div className="row">
+                        <div className="col-md-12">{post.body}</div>
                       </div>
-                      <div className="post-body">
-                        <div className="row">
-                          <div className="col-md-12">{post.body}</div>
+                    </div>
+                    <div className="post-footer">
+                      <div className="row">
+                        <div className="col-md-8">
+                          <Moment format="DD/MM/YYYY HH:mm">{post.timestamp}</Moment>
+                        </div>
+                        <div
+                          className="col-md-2"
+                          onClick={() => this.openModal('comment', post.id)}
+                        >
+                          <MdComment /> {post.commentCount}
+                        </div>
+                        <div className="col-md-2">
+                          <MdCompareArrows /> {post.voteScore}
                         </div>
                       </div>
-                      <div className="post-footer">
-                        <div className="row">
-                          <div className="col-md-8">
-                            <Moment format="DD/MM/YYYY HH:mm">{post.timestamp}</Moment>
-                          </div>
-                          <div
-                            className="col-md-2"
-                            onClick={() => this.openModal('comment', post.id)}
+                      <div className="row">
+                        <div className="col-md-12">
+                          <Button
+                            bsStyle="primary"
+                            className="paddinBtn"
+                            onClick={() => this.openModal('post', post.id)}
                           >
-                            <MdComment /> {post.commentCount}
-                          </div>
-                          <div className="col-md-2">
-                            <MdCompareArrows /> {post.voteScore}
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-md-12">
-                            <Button
-                              bsStyle="primary"
-                              className="paddinBtn"
-                              onClick={() => this.openModal('post', post.id)}
-                            >
-                              Edit post
-                            </Button>
-                            <Button
-                              bsStyle="primary"
-                              className="paddinBtn"
-                              onClick={() => this.deletePost(post.id)}
-                            >
-                              Delete post
-                            </Button>
-                            <Button
-                              bsStyle="primary"
-                              className="paddinBtn"
-                              onClick={() => this.votePost(post.id, 'upVote')}
-                            >
-                              Vote +
-                            </Button>
-                            <Button
-                              bsStyle="primary"
-                              className="paddinBtn"
-                              onClick={() => this.votePost(post.id, 'downVote')}
-                            >
-                              Vote -
-                            </Button>
-                          </div>
+                            Edit post
+                          </Button>
+                          <Button
+                            bsStyle="primary"
+                            className="paddinBtn"
+                            onClick={() => this.deletePost(post.id)}
+                          >
+                            Delete post
+                          </Button>
+                          <Button
+                            bsStyle="primary"
+                            className="paddinBtn"
+                            onClick={() => this.votePost(post.id, 'upVote')}
+                          >
+                            Vote +
+                          </Button>
+                          <Button
+                            bsStyle="primary"
+                            className="paddinBtn"
+                            onClick={() => this.votePost(post.id, 'downVote')}
+                          >
+                            Vote -
+                          </Button>
                         </div>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
+              )}
               <div className="col-md-3" />
             </div>
           ))}

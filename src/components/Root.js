@@ -105,14 +105,14 @@ class Root extends Component {
   render() {
     return (
       <div className="root">
-        <div className="categories">
+        {/* <div className="categories">
           <h2>Categories</h2>
           {this.props.categories.categories.map(category => (
             <div key={category.name} onClick={() => this.selectCategory(category.name)}>
-              <Link to="/categories">{category.name}</Link>
+              <Link to={`/categories/${category.name}`}>{category.name}</Link>
             </div>
           ))}
-        </div>
+        </div> */}
         <div className="posts">
           <h2>Posts</h2>
           <Button

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import * as readableAPI from './../utils/readableAPIUtils'
 
 import { connect } from 'react-redux'
-import { editPost, votePost, deletePost } from './../store/actions/posts'
+import { editPost } from './../store/actions/posts'
 import { addComment, cleanComments, deleteComment, selectComment } from '../store/actions/comments'
 
 import Moment from 'react-moment'
@@ -21,8 +21,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     editPost: post => dispatch(editPost(post)),
-    deletePost: id => dispatch(deletePost(id)),
-    votePost: (id, vote) => dispatch(votePost(id, vote)),
     addComment: comment => dispatch(addComment(comment)),
     cleanComments: () => dispatch(cleanComments()),
     deleteComment: id => dispatch(deleteComment(id)),
@@ -58,18 +56,6 @@ class Posts extends Component {
     }
   }
 
-  votePost = (id, vote) => {
-    readableAPI.votePost(id, vote).then(post => {
-      this.props.votePost(id, vote)
-    })
-  }
-  deletePost = id => {
-    readableAPI.deletePost(id).then(post => {
-      this.props.deletePost(id)
-      window.location.href = '/'
-    })
-  }
-
   closeModal = () => {
     this.setState({
       isPostModalOpen: false,
@@ -81,9 +67,6 @@ class Posts extends Component {
     // console.log('====================================')
     // console.log(this.props.posts.selectedPost)
     // console.log('====================================')
-    if (this.props.posts.selectedPost.id === undefined) {
-      window.location.href = '/'
-    }
     readableAPI.getCommentsFromPost(this.props.posts.selectedPost.id).then(comments => {
       this.props.cleanComments()
       comments.forEach(comment => this.props.addComment(comment))
@@ -161,29 +144,8 @@ class Posts extends Component {
         <Button bsStyle="primary" className="paddinBtn" onClick={() => this.openModal('edit')}>
           Edit post
         </Button>
-        <Button
-          bsStyle="primary"
-          className="paddinBtn"
-          onClick={() => this.deletePost(selectedPost.id)}
-        >
-          Delete post
-        </Button>
         <Button bsStyle="primary" className="paddinBtn" onClick={() => this.openModal()}>
           Add comment
-        </Button>
-        <Button
-          bsStyle="primary"
-          className="paddinBtn"
-          onClick={() => this.votePost(selectedPost.id, 'upVote')}
-        >
-          Vote +
-        </Button>
-        <Button
-          bsStyle="primary"
-          className="paddinBtn"
-          onClick={() => this.votePost(selectedPost.id, 'downVote')}
-        >
-          Vote -
         </Button>
         {this.state.isPostModalOpen && (
           <PostModal closeModalAction={this.closeModal} postId={selectedPost.id} />
