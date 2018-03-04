@@ -78,12 +78,15 @@ class Posts extends Component {
   }
 
   componentDidMount() {
-    // console.log('====================================')
-    // console.log(this.props.posts.selectedPost)
-    // console.log('====================================')
-    if (this.props.posts.selectedPost.id === undefined) {
-      window.location.href = '/'
+    let path = this.props.history.location.pathname.split('/')
+    let id = null
+    if (path[1] !== 'posts') {
+      id = path[2]
     }
+    if (this.props.posts.selectedPost.id === undefined || id === null) {
+      window.location.href = '/not-found'
+    }
+
     readableAPI.getCommentsFromPost(this.props.posts.selectedPost.id).then(comments => {
       this.props.cleanComments()
       comments.forEach(comment => this.props.addComment(comment))

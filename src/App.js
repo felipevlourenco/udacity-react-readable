@@ -5,6 +5,7 @@ import * as readableAPI from './utils/readableAPIUtils'
 import Root from './components/Root'
 import Categories from './components/Categories'
 import Posts from './components/Posts'
+import NotFound from './components/NotFound'
 
 import { Navbar, Nav, NavItem } from 'react-bootstrap'
 
@@ -58,6 +59,7 @@ class App extends Component {
         ))}
         <Route path="/:category/:id" render={({ history }) => <Posts history={history} />} />
         <Route path="/posts" render={({ history }) => <Posts history={history} />} />
+        <Route path="/not-found" render={({ history }) => <NotFound history={history} />} />
       </div>
     )
   }
